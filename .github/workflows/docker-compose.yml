@@ -1,0 +1,26 @@
+name: Docker Compose Build
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  docker-compose:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Build and Start Services
+        run: docker-compose up --build -d
+
+      - name: Run Tests
+        run: docker-compose exec app pytest
+
+      - name: Tear Down
+        run: docker-compose down
